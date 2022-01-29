@@ -6,10 +6,18 @@ export const gg = async (
         headers: { Referer: `https://hitomi.la/reader/${content_id}.html` },
     });
 
-    const gg_js = await res.text();
+    const gg_js = (await res.text()).replace(/return.{0,};/g, "return o;");
+
+    // console.log(gg_js);
 
     const a = eval(`
     let gg = {};
+
+    const $ = () => ({
+        attr: () => {},
+    });
+
+    const window = {};
 
     const document = {
         title: "Hitomi.la",
@@ -18,7 +26,7 @@ export const gg = async (
         },
         documentElement: {
             clientHeight: 400
-        }
+        },
     };
 
     ${gg_js}
