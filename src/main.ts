@@ -1,21 +1,13 @@
-import { Application } from "https://deno.land/x/abc@v1.3.3/mod.ts";
+import * as io from "https://deno.land/std@0.180.0/io/mod.ts";
 
-import { gg } from "./gg.ts";
+import { gg } from "https://gist.githubusercontent.com/syrflover/43428606f107b77cf7dda7a68b16b0f3/raw/1ec5e586aebf416a88fdfbd98200550391f931ed/gg.ts";
 
-const PORT = 13333;
+// console.log(Deno.args);
 
-const app = new Application();
+const [content_id, code_number] = Deno.args.map((x) => parseInt(x, 10));
 
-console.log(`port ${PORT}`);
+const r = await gg(content_id, code_number);
 
-app.get("/gg.json", (ctx) => {
-    const { "content-id": content_id_, "code-number": code_number_ } =
-        ctx.queryParams;
-    const [content_id, code_number] = [content_id_, code_number_].map((x) =>
-        parseInt(x, 10)
-    );
+const buf = new io.Buffer(new TextEncoder().encode(JSON.stringify(r)));
 
-    return gg(content_id, code_number);
-}).start({
-    port: PORT,
-});
+Deno.stdout.write(buf.bytes());

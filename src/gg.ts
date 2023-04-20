@@ -3,7 +3,9 @@ export const gg = async (
     code_number: number
 ): Promise<{ m: number; b: string }> => {
     const res = await fetch("https://ltn.hitomi.la/gg.js", {
-        headers: { Referer: `https://hitomi.la/reader/${content_id}.html` },
+        headers: {
+            Referer: `https://hitomi.la/reader/${content_id}.html`,
+        },
     });
 
     const gg_js = (await res.text()).replace(/return.{0,};/g, "return o;");
@@ -33,7 +35,7 @@ export const gg = async (
     
     const ret = () => ({
         m: gg.m(${code_number}),
-        b: gg.b
+        b: gg.b.replaceAll('/', ''),
     })
 
     ret()
@@ -44,4 +46,4 @@ export const gg = async (
     return a;
 };
 
-// gg(2105173, 2828);
+// gg(2277336, 2828);
